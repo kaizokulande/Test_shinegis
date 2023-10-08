@@ -16,7 +16,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class EquipementsController extends AbstractController
 {
-    // fonction pour ajouter un equipement
+    // fonction API pour ajouter un equipement
     #[Route('api/ajouter', name:'ajouter', methods:'POST')]
     public function ajout_equipement(Request $request, SerializerInterface $serializer, EntityManagerInterface $em, ValidatorInterface $validator): Response
     {
@@ -39,7 +39,7 @@ class EquipementsController extends AbstractController
         }
     }
 
-    // fonction pour modifier un équipement
+    // fonction API pour modifier un équipement
     #[Route('/api/modifier/{id<\d+>}', name:'modifier', methods:'PUT')]
     public function modifier_equipement(Request $request, EquipementRepository $eqprepository, $id, EntityManagerInterface $em, ValidatorInterface $validator, SerializerInterface $serializer): Response
     {
@@ -63,7 +63,7 @@ class EquipementsController extends AbstractController
         }
     }
 
-    // fonction pour supprimer un équipement
+    // fonction API pour supprimer un équipement
     #[Route('/api/supprimer/{id<\d+>}', name: 'supprimer', methods:'DELETE')]
     public function suppr_voiture(EquipementRepository $eqprepository, $id, EntityManagerInterface $em): Response
     {
@@ -75,7 +75,7 @@ class EquipementsController extends AbstractController
         return $this->json('Equipement supprimé.');
     }
 
-    // fonction afficher équipements non supprimé avec filtre par categorie   order_name(ex:name,categorie,created_at,...)    order(desc ou asc)
+    // fonction API pour afficher les équipements non supprimé avec filtre par categorie   order_name(ex:name,categorie,created_at,...)    order(desc ou asc)
     #[Route('/api/equipements/{categorie?}/{order_name?}/{order?}', name: 'equipements', methods: 'GET')]
     public function index(EquipementRepository $equipRepository, $categorie, $order_name, $order): Response
     {
