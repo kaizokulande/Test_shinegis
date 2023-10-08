@@ -16,6 +16,20 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class EquipementsController extends AbstractController
 {
+    // fonction API pour afficher les équipements non supprimé avec filtre par categorie   order_name(ex:name,categorie,created_at,...)    order(desc ou asc)
+    #[Route('/api/equipements/{categorie?}/{order_name?}/{order?}', name: 'equipements', methods: 'GET')]
+    public function index(EquipementRepository $equipRepository, $categorie, $order_name, $order): Response
+    {
+        $order_name = $order_name ?: 'createdAt';
+        $order = $order ?: 'desc';
+        if (null == $categorie) {
+            $equipements = $equipRepository->findOrderby($order_name, $order);
+        } else {
+            $equipements[] = $equipRepository->findBy(['categorie' => $categorie], [$order_name => $order]);
+        }
+        return $this->json($equipements);
+    }
+
     // fonction API pour ajouter un equipement
     #[Route('api/ajouter', name:'ajouter', methods:'POST')]
     public function ajout_equipement(Request $request, SerializerInterface $serializer, EntityManagerInterface $em, ValidatorInterface $validator): Response
@@ -63,26 +77,12 @@ class EquipementsController extends AbstractController
 
     // fonction API pour supprimer un équipement
     #[Route('/api/supprimer/{id<\d+>}', name: 'supprimer', methods:'DELETE')]
-    public function suppr_voiture(EquipementRepository $eqprepository, $id, EntityManagerInterface $em): Response
+    public function suppr_equipement(EquipementRepository $eqprepository, $id, EntityManagerInterface $em): Response
     {
         $equipement = new Equipement();
         $equipement = $eqprepository->find($id);
         $em->remove($equipement);
         $em->flush();
         return $this->json('Equipement supprimé.');
-    }
-
-    // fonction API pour afficher les équipements non supprimé avec filtre par categorie   order_name(ex:name,categorie,created_at,...)    order(desc ou asc)
-    #[Route('/api/equipements/{categorie?}/{order_name?}/{order?}', name: 'equipements', methods: 'GET')]
-    public function index(EquipementRepository $equipRepository, $categorie, $order_name, $order): Response
-    {
-        $order_name = $order_name ?: 'createdAt';
-        $order = $order ?: 'desc';
-        if (null == $categorie) {
-            $equipements = $equipRepository->findOrderby($order_name, $order);
-        } else {
-            $equipements[] = $equipRepository->findBy(['categorie' => $categorie], [$order_name => $order]);
-        }
-        return $this->json($equipements);
     }
 }
