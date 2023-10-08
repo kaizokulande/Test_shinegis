@@ -29,7 +29,6 @@ class EquipementsController extends AbstractController
             }
             $em->persist($equipement);
             $em->flush();
-
             return $this->json($equipement);
         } catch (NotEncodableValueException $e) {
             return $this->json([
@@ -53,7 +52,6 @@ class EquipementsController extends AbstractController
             }
             $em->persist($equipement);
             $em->flush();
-
             return $this->json($equipement);
         } catch (NotEncodableValueException $e) {
             return $this->json([
@@ -71,7 +69,6 @@ class EquipementsController extends AbstractController
         $equipement = $eqprepository->find($id);
         $em->remove($equipement);
         $em->flush();
-
         return $this->json('Equipement supprimé.');
     }
 
@@ -86,7 +83,6 @@ class EquipementsController extends AbstractController
         } else {
             $equipements[] = $equipRepository->findBy(['categorie' => $categorie], [$order_name => $order]);
         }
-
         return $this->json($equipements);
     }
 }
