@@ -4,11 +4,13 @@ namespace App\Entity;
 
 use App\Repository\EquipementRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assure;
 
 #[ORM\Entity(repositoryClass: EquipementRepository::class)]
 #[ORM\Table(name:"equipements")]
 #[ORM\HasLifecycleCallbacks]
+#[UniqueEntity(fields:['number'], errorPath: 'number', message: 'Le numero de serie doit être unique.')]
 class Equipement
 {
     #[ORM\Id]
